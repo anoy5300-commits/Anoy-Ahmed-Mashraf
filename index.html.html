@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anoy Ahmed Mashraf · elite portfolio</title>
+  <!-- pure vanilla, no frameworks, premium glassmorphism & motion -->
+  <style>
+    /* ========== style.css ========== */
+    /* ----- RESET & GLOBAL ----- */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      overflow-x: hidden;
+    }
+
+    body {
+      background-color: #0b0c10;
+      background-image: radial-gradient(circle at 30% 10%, rgba(45, 255, 196, 0.03) 0%, transparent 30%),
+                        radial-gradient(circle at 80% 70%, rgba(0, 180, 255, 0.04) 0%, transparent 40%);
+      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+      color: #eef4f8;
+      line-height: 1.5;
+      font-weight: 300;
+      letter-spacing: 0.02em;
+      opacity: 0;
+      transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    body.loaded {
+      opacity: 1;
+    }
+
+    /* typography premium */
+    h1, h2, h3 {
+      font-weight: 400;
+      letter-spacing: -0.02em;
+    }
+
+    h2 {
+      font-size: clamp(2.2rem, 8vw, 3.5rem);
+      margin-bottom: 2.5rem;
+      background: linear-gradient(130deg, #ffffff, #b7ffe0);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      position: relative;
+      display: inline-block;
+    }
+
+    h2::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: -10px;
+      width: 80px;
+      height: 2px;
+      background: linear-gradient(90deg, #00f0c0, transparent);
+    }
+
+    /* ----- LOADER / INTRO ANIMATION (page loading intro) ----- */
+    .page-loader {
+      position: fixed;
+      inset: 0;
+      background: #060708;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      transition: opacity 1s ease, visibility 1s ease;
+    }
+
+    .page-loader.hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .loader-logo {
+      font-size: 3rem;
+      font-weight: 300;
+      color: transparent;
+      -webkit-text-stroke: 1.5px rgba(0, 255, 200, 0.7);
+      text-stroke: 1.5px rgba(0, 255, 200, 0.7);
+      animation: pulseGlow 1.8s infinite alternate;
+    }
+
+    @keyframes pulseGlow {
+      0% { text-shadow: 0 0 5px #00ffe1, 0 0 15px #00ffc3; opacity: 0.6; }
+      100% { text-shadow: 0 0 20px #4effe0, 0 0 40px #00c8b0; opacity: 1; }
+    }
+
+    /* ----- GLASS & NEUMORPH BASE ----- */
+    .glass-card {
+      background: rgba(20, 30, 30, 0.25);
+      backdrop-filter: blur(12px) saturate(180%);
+      -webkit-backdrop-filter: blur(12px) saturate(180%);
+      border: 1px solid rgba(0, 255, 200, 0.1);
+      border-radius: 42px;
+      box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.7), inset 0 1px 1px rgba(255, 255, 255, 0.06);
+    }
+
+    /* ----- LAYOUT & CONTAINER ----- */
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    section {
+      padding: 6rem 0;
+      position: relative;
+    }
+
+    /* ----- BUTTONS (glow / ripple) ----- */
+    .btn {
+      display: inline-block;
+      padding: 1rem 2.6rem;
+      border-radius: 50px;
+      background: rgba(0, 255, 200, 0.03);
+      border: 1px solid rgba(0, 255, 200, 0.3);
+      color: #f0fffa;
+      font-weight: 400;
+      letter-spacing: 1.5px;
+      text-decoration: none;
+      font-size: 1rem;
+      backdrop-filter: blur(8px);
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0, 255, 200, 0.1);
+    }
+
+    .btn::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(0, 255, 200, 0.4);
+      transform: translate(-50%, -50%);
+      transition: width 0.5s, height 0.5s;
+    }
+
+    .btn:hover::after {
+      width: 400px;
+      height: 400px;
+    }
+
+    .btn:hover {
+      border-color: #00ffcc;
+      box-shadow: 0 0 25px #00ffcc, 0 0 5px #4effe0 inset;
+      color: #ffffff;
+    }
+
+    /* ----- HERO SECTION (animated) ----- */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 3;
+    }
+
+    .hero-name {
+      font-size: clamp(3rem, 15vw, 6rem);
+      font-weight: 400;
+      line-height: 1.1;
+      margin-bottom: 0.5rem;
+      text-shadow: 0 0 20px rgba(0, 255, 200, 0.5);
+    }
+
+    .hero-name span {
+      display: inline-block;
+      opacity: 0;
+      transform: translateY(80px) rotate(5deg);
+      animation: slideUpName 0.7s forwards cubic-bezier(0.2, 0.9, 0.3, 1.1);
+    }
+
+    @keyframes slideUpName {
+      to { opacity: 1; transform: translateY(0) rotate(0); }
+    }
+
+    .hero-tagline {
+      font-size: 1.6rem;
+      margin: 1.5rem 0 2.5rem;
+      color: #b2ffe6;
+      text-shadow: 0 0 15px #00ffe1;
+      opacity: 0;
+      animation: fadeInUp 0.8s 0.5s forwards;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(40px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero-btns {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      opacity: 0;
+      animation: fadeInUp 0.8s 0.7s forwards;
+    }
+
+    /* cursor hover effect (custom cursor later) */
+    .cursor-effect {
+      width: 40px;
+      height: 40px;
+      border: 1px solid #00ffe1;
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      mix-blend-mode: difference;
+      transition: transform 0.1s, width 0.2s, height 0.2s, background 0.2s;
+      transform: translate(-50%, -50%);
+      background: rgba(0, 255, 200, 0.05);
+      backdrop-filter: blur(4px);
+    }
+
+    /* ----- about cards animated ----- */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+    }
+
+    .bio-card {
+      padding: 2.5rem;
+      background: rgba(15, 25, 22, 0.4);
+      backdrop-filter: blur(12px);
+      border-radius: 48px;
+      border: 1px solid rgba(0, 255, 200, 0.1);
+      transition: all 0.4s;
+      box-shadow: 0 20px 30px -15px black;
+    }
+
+    .bio-card:hover {
+      border-color: #00ffc3;
+      box-shadow: 0 0 40px rgba(0, 255, 200, 0.3);
+    }
+
+    .timeline-item {
+      display: flex;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+      padding: 1.5rem;
+      border-radius: 30px;
+      background: rgba(0, 20, 15, 0.3);
+      backdrop-filter: blur(5px);
+      transition: 0.3s;
+      border-left: 3px solid transparent;
+    }
+
+    .timeline-item:hover {
+      border-left: 3px solid #00ffc3;
+      background: rgba(0, 255, 200, 0.05);
+    }
+
+    .timeline-year {
+      font-weight: 600;
+      color: #00ffc3;
+      font-size: 1.2rem;
+    }
+
+    /* skills cards */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .skill-card {
+      padding: 2rem;
+      background: rgba(20, 30, 30, 0.2);
+      backdrop-filter: blur(10px);
+      border-radius: 30px;
+      border: 1px solid rgba(0, 255, 200, 0.1);
+      transition: 0.3s;
+    }
+
+    .skill-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      border-color: #00ffe1;
+    }
+
+    .skill-progress {
+      height: 8px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 10px;
+      margin: 1.2rem 0;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #00c8b0, #a0ffec);
+      border-radius: 10px;
+      transition: width 1.2s cubic-bezier(0.2, 0.9, 0.3, 1);
+    }
+
+    /* project cards */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+
+    .project-card {
+      padding: 2rem;
+      background: rgba(0, 30, 30, 0.25);
+      backdrop-filter: blur(10px);
+      border-radius: 40px;
+      border: 1px solid rgba(255,255,255,0.05);
+      transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1);
+      cursor: pointer;
+    }
+
+    .project-card:hover {
+      border-color: #00ffcc;
+      box-shadow: 0 30px 40px -20px #00ffc3;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(12px);
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+    }
+
+    .modal-content {
+      max-width: 500px;
+      padding: 3rem;
+      border-radius: 60px;
+      background: rgba(10, 20, 18, 0.9);
+      border: 1px solid #00ffc3;
+      text-align: center;
+    }
+
+    .close-modal {
+      margin-top: 2rem;
+      padding: 0.8rem 2.5rem;
+      background: transparent;
+      border: 1px solid #00ffc3;
+      color: white;
+      border-radius: 40px;
+    }
+
+    /* tools & software badges */
+    .tools-cloud {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    .badge {
+      padding: 0.8rem 2rem;
+      background: rgba(0, 255, 200, 0.05);
+      border: 1px solid rgba(0, 255, 200, 0.3);
+      border-radius: 100px;
+      backdrop-filter: blur(5px);
+      font-size: 1.2rem;
+      transition: 0.2s;
+      box-shadow: 0 0 15px rgba(0,255,200,0.1);
+    }
+
+    .badge:hover {
+      background: #00ffc320;
+      transform: scale(1.05);
+      box-shadow: 0 0 30px #00ffcc;
+    }
+
+    /* contact form */
+    .contact-form {
+      display: grid;
+      gap: 2rem;
+      max-width: 700px;
+      margin: 2rem auto 0;
+    }
+
+    .form-group input, .form-group textarea {
+      width: 100%;
+      background: rgba(20, 30, 28, 0.4);
+      border: 1px solid #2a3f3a;
+      border-radius: 50px;
+      padding: 1.2rem 2rem;
+      color: white;
+      font-size: 1rem;
+      backdrop-filter: blur(5px);
+      transition: 0.3s;
+    }
+
+    .form-group input:focus, .form-group textarea:focus {
+      outline: none;
+      border-color: #00ffc3;
+      box-shadow: 0 0 30px #00ffc380;
+    }
+
+    /* footer */
+    .footer {
+      text-align: center;
+      padding: 2rem 0;
+      border-top: 1px solid rgba(0,255,200,0.1);
+    }
+
+    /* scroll reveal (js will handle class .revealed) */
+    .reveal {
+      opacity: 0;
+      transform: translateY(50px);
+      transition: all 0.8s ease;
+    }
+
+    .revealed {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* subtle parallax (js) */
+    .parallax-layer {
+      transition: transform 0.05s linear;
+    }
+
+    /* responsiveness */
+    @media (max-width: 800px) {
+      .about-grid { grid-template-columns: 1fr; }
+      .hero-btns { flex-direction: column; align-items: start; }
+    }
+  </style>
+  <!-- google fonts fallback -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- loader animation (page intro) -->
+  <div class="page-loader" id="loader">
+    <div class="loader-logo">A.M.</div>
+  </div>
+
+  <!-- custom cursor -->
+  <div class="cursor-effect" id="cursor"></div>
+
+  <!-- main content -->
+  <main>
+    <!-- hero -->
+    <section class="hero" id="home">
+      <div class="container hero-content">
+        <h1 class="hero-name"><span>A</span><span>n</span><span>o</span><span>y</span> <span>A</span><span>h</span><span>m</span><span>e</span><span>d</span> <span>M</span><span>a</span><span>s</span><span>h</span><span>r</span><span>a</span><span>f</span></h1>
+        <div class="hero-tagline">student / digital architect · Mohammadpur Govt. College</div>
+        <div class="hero-btns">
+          <a href="#contact" class="btn">CONTACT</a>
+          <a href="#projects" class="btn">PROJECTS</a>
+        </div>
+      </div>
+      <!-- subtle parallax background (shapes) -->
+      <div class="parallax-layer" data-speed="-10" style="position:absolute; top:20%; left:5%; width:200px; height:200px; background:radial-gradient(circle, #00ffc322 0%, transparent 70%); border-radius:50%; filter:blur(40px);"></div>
+      <div class="parallax-layer" data-speed="15" style="position:absolute; bottom:10%; right:5%; width:300px; height:300px; background:radial-gradient(circle, #4effe022 0%, transparent 70%); border-radius:50%; filter:blur(60px);"></div>
+    </section>
+
+    <!-- about -->
+    <section id="about">
+      <div class="container">
+        <h2>about</h2>
+        <div class="about-grid">
+          <div class="bio-card glass-card reveal">
+            <p style="font-size:1.4rem; margin-bottom:1rem;">✧ student at Mohammadpur Govt. College, passionate about gaming, design & code.</p>
+            <p>short bio: Anoy Ahmed Mashraf · exploring interactive experiences, blending minimalism with futurism. Playing game is not just hobby — it's a lens to understand immersive storytelling.</p>
+          </div>
+          <div class="timeline reveal">
+            <div class="timeline-item glass-card">
+              <span class="timeline-year">2023+</span>
+              <div>Interactive media & game design fundamentals (self-taught).</div>
+            </div>
+            <div class="timeline-item glass-card">
+              <span class="timeline-year">2022</span>
+              <div>Started coding & motion experiments.</div>
+            </div>
+            <div class="timeline-item glass-card">
+              <span class="timeline-year">2021</span>
+              <div>First UI exploration — tools: Anoy (yes, that's my signature tool).</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- skills (with animated progress) -->
+    <section id="skills">
+      <div class="container">
+        <h2>skills & domains</h2>
+        <div class="skills-grid">
+          <div class="skill-card reveal">
+            <h3>Technical</h3>
+            <div>HTML/CSS/JS</div><div class="skill-progress"><div class="progress-fill" data-width="88"></div></div>
+            <div>Motion UI</div><div class="skill-progress"><div class="progress-fill" data-width="75"></div></div>
+            <div>Game logic</div><div class="skill-progress"><div class="progress-fill" data-width="60"></div></div>
+          </div>
+          <div class="skill-card reveal">
+            <h3>Tools</h3>
+            <div>Anoy (custom)</div><div class="skill-progress"><div class="progress-fill" data-width="95"></div></div>
+            <div>Figma</div><div class="skill-progress"><div class="progress-fill" data-width="80"></div></div>
+            <div>VS Code</div><div class="skill-progress"><div class="progress-fill" data-width="90"></div></div>
+          </div>
+          <div class="skill-card reveal">
+            <h3>Domains</h3>
+            <div>Game design</div><div class="skill-progress"><div class="progress-fill" data-width="70"></div></div>
+            <div>Frontend</div><div class="skill-progress"><div class="progress-fill" data-width="85"></div></div>
+            <div>Creative dev</div><div class="skill-progress"><div class="progress-fill" data-width="78"></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- projects / experience -->
+    <section id="projects">
+      <div class="container">
+        <h2>featured projects</h2>
+        <div class="projects-grid">
+          <div class="project-card reveal" data-project="1">
+            <h3>Glassmorphism world</h3>
+            <p>Luxury UI concept with motion.</p>
+          </div>
+          <div class="project-card reveal" data-project="2">
+            <h3>Anoy tool suite</h3>
+            <p>Custom creative software.</p>
+          </div>
+          <div class="project-card reveal" data-project="3">
+            <h3>game prototype</h3>
+            <p>Interactive narrative.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- modal (popup) for projects -->
+    <div class="modal" id="projectModal">
+      <div class="modal-content">
+        <h3 id="modalTitle">Project</h3>
+        <p id="modalDesc">More details coming soon.</p>
+        <button class="close-modal btn">close</button>
+      </div>
+    </div>
+
+    <!-- tools & software -->
+    <section id="tools">
+      <div class="container">
+        <h2>tools & software</h2>
+        <div class="tools-cloud">
+          <span class="badge">Anoy</span>
+          <span class="badge">Figma</span>
+          <span class="badge">After Effects</span>
+          <span class="badge">VS Code</span>
+          <span class="badge">Blender</span>
+          <span class="badge">Unity</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- contact + animated form -->
+    <section id="contact">
+      <div class="container">
+        <h2>contact</h2>
+        <div style="text-align: center; margin-bottom: 2rem;">
+          <p>📧 anoy5300@gmail.com &nbsp; | &nbsp; 📞 01887204163</p>
+        </div>
+        <form class="contact-form" id="demoForm">
+          <div class="form-group"><input type="text" placeholder="your name" /></div>
+          <div class="form-group"><input type="email" placeholder="email" /></div>
+          <div class="form-group"><textarea rows="4" placeholder="message"></textarea></div>
+          <div><button type="button" class="btn" style="width:100%;">send message (UI only)</button></div>
+        </form>
+      </div>
+    </section>
+
+    <!-- footer -->
+    <footer class="footer">
+      <div class="container">
+        <p>© Anoy Ahmed Mashraf — elite digital presence</p>
+      </div>
+    </footer>
+  </main>
+
+  <script>
+    // ========== script.js ========== //
+    (function() {
+      // 1) loader hidden after page load
+      window.addEventListener('load', function() {
+        document.body.classList.add('loaded');
+        setTimeout(() => {
+          document.getElementById('loader').classList.add('hidden');
+        }, 400);
+      });
+
+      // 2) custom cursor effect
+      const cursor = document.getElementById('cursor');
+      document.addEventListener('mousemove', (e) => {
+        cursor.style.left = e.clientX + 'px';
+        cursor.style.top = e.clientY + 'px';
+      });
+      document.addEventListener('mousedown', () => cursor.style.transform = 'translate(-50%, -50%) scale(0.8)');
+      document.addEventListener('mouseup', () => cursor.style.transform = 'translate(-50%, -50%) scale(1)');
+
+      // 3) subtle parallax (scroll + mouse)
+      const layers = document.querySelectorAll('.parallax-layer');
+      document.addEventListener('mousemove', (e) => {
+        const x = (e.clientX / window.innerWidth - 0.5) * 2;
+        const y = (e.clientY / window.innerHeight - 0.5) * 2;
+        layers.forEach(layer => {
+          const speed = parseFloat(layer.getAttribute('data-speed') || '5');
+          layer.style.transform = `translate(${x * speed}px, ${y * speed}px)`;
+        });
+      });
+
+      // 4) scroll reveal & progress fill animation
+      const revealElements = document.querySelectorAll('.reveal');
+      const progressBars = document.querySelectorAll('.progress-fill');
+
+      function checkReveal() {
+        const windowHeight = window.innerHeight;
+        revealElements.forEach(el => {
+          const rect = el.getBoundingClientRect();
+          if (rect.top < windowHeight - 100 && rect.bottom > 0) {
+            el.classList.add('revealed');
+          } else {
+            // optional: remove class if you want hide again, but keep revealed after first
+            // we prefer keep revealed
+          }
+        });
+
+        // animate progress bars when in view (only once)
+        progressBars.forEach(bar => {
+          if (!bar.classList.contains('animated')) {
+            const rect = bar.getBoundingClientRect();
+            if (rect.top < windowHeight - 50 && rect.bottom > 0) {
+              const width = bar.getAttribute('data-width') || 70;
+              bar.style.width = width + '%';
+              bar.classList.add('animated');
+            }
+          }
+        });
+      }
+
+      window.addEventListener('scroll', checkReveal);
+      window.addEventListener('resize', checkReveal);
+      checkReveal(); // immediate
+
+      // 5) project modal (hover + click)
+      const modal = document.getElementById('projectModal');
+      const modalTitle = document.getElementById('modalTitle');
+      const modalDesc = document.getElementById('modalDesc');
+      const closeModal = document.querySelector('.close-modal');
+
+      document.querySelectorAll('.project-card').forEach(card => {
+        card.addEventListener('click', (e) => {
+          const project = card.getAttribute('data-project');
+          let title = 'project', desc = 'details';
+          if (project === '1') { title = 'Glassmorphism world'; desc = 'Fully responsive glass UI with animated gradients and microinteractions.'; }
+          if (project === '2') { title = 'Anoy tool suite'; desc = 'Custom creative software for realtime motion experiments.'; }
+          if (project === '3') { title = 'game prototype'; desc = 'Interactive narrative about time — built with canvas.'; }
+          modalTitle.innerText = title;
+          modalDesc.innerText = desc;
+          modal.style.display = 'flex';
+        });
+      });
+
+      closeModal.addEventListener('click', () => modal.style.display = 'none');
+      modal.addEventListener('click', (e) => { if (e.target === modal) modal.style.display = 'none'; });
+
+      // 6) button ripple/glow already via CSS, but we add "animation complete" dummy
+      // 7) name staggered animation (already done in CSS)
+      // 8) page transitions: smooth scroll and load transition done
+      // 9) extra: contact form is UI only
+
+      // small hover on badges / micro
+      console.log('✨ premium portfolio ready');
+    })();
+  </script>
+  <!-- ensure any missing reveal style, and prevent flicker -->
+  <style>
+    /* minor fix for revealed persistence */
+    .reveal.revealed { opacity: 1; transform: translateY(0); }
+    .btn { cursor: pointer; }
+    body * { cursor: none; } /* custom cursor active */
+    a, button, .btn, .badge, .project-card { cursor: none; }
+  </style>
+</body>
+</html>
